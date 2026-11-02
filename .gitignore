@@ -1,0 +1,12 @@
+# secrets and local config: never commit
+.kube/
+kubeconfig*
+*.pem
+*.key
+.env
+*.secret.yaml
+# editor/OS
+.vscode/
+.DS_Store
+# helm build artifacts
+*.tgz
