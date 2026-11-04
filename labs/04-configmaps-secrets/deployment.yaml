@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-demo
+  template:
+    metadata:
+      labels:
+        app: config-demo
+    spec:
+      containers:
+        - name: app
+          image: busybox:1.36
+          command: ["sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "env=$APP_ENV level=$LOG_LEVEL user=$DB_USER pw_len=${#DB_PASSWORD}"
+                cat /etc/app/message.txt; echo
+                sleep 10
+              done
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: db-creds
+          volumeMounts:
+            - name: cfg
+              mountPath: /etc/app
+      volumes:
+        - name: cfg
+          configMap:
+            name: app-config
+            items:
+              - key: message.txt
+                path: message.txt
