@@ -29,3 +29,10 @@
 - port-forward bypasses readiness.
 - Correction: EndpointSlices include not-ready Pods with ready=false.
 - Revisit: collect Event messages when diagnosing, not just symptoms.
+
+## Projects 2+3, Part 2: frontend, Ingress, availability (2026-11-16)
+- ConfigMap generated from files (--from-file); subPath mounts do not live-update.
+- Zero-downtime backend restart verified with a concurrent curl loop (all 200).
+- Failure: Secret changed without changing the DB -> new Pods 0/1, rollout stalled, old Pods served. Real error only in the /ready body (not logged); found by exec-ing into the Pod.
+- Takeaways: log errors; rotate credentials DB-first (dual credentials), then Secret, then roll.
+- Revisit: dual-credential rotation, external secret managers, NetworkPolicy and TLS (Module 9).

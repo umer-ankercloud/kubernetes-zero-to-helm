@@ -1,0 +1,9 @@
+<!doctype html>
+<title>Shop</title>
+<h1>Shop visits</h1>
+<pre id="out">loading...</pre>
+<script>
+fetch('/api/visits').then(r => r.json()).then(d => {
+  document.getElementById('out').textContent = JSON.stringify(d, null, 2);
+});
+</script>

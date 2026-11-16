@@ -1,0 +1,24 @@
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/backend    2/2     2            2           130m
+deployment.apps/frontend   2/2     2            2           23m
+
+NAME                        READY   AGE
+statefulset.apps/postgres   1/1     133m
+
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/backend-5db7444d7b-mswst    1/1     Running   0          16m
+pod/backend-5db7444d7b-t2sx7    1/1     Running   0          12m
+pod/frontend-784ccd6bb7-7prl9   1/1     Running   0          23m
+pod/frontend-784ccd6bb7-s658m   1/1     Running   0          23m
+pod/postgres-0                  1/1     Running   0          94m
+
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/backend    ClusterIP   10.98.251.110   <none>        80/TCP     130m
+service/frontend   ClusterIP   10.97.206.214   <none>        80/TCP     23m
+service/postgres   ClusterIP   None            <none>        5432/TCP   133m
+
+NAME                                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/data-postgres-0   Bound    pvc-42e81566-00f1-4c86-ac39-7a7f0b06febc   1Gi        RWO            standard       <unset>                 133m
+
+NAME                             CLASS   HOSTS        ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/shop   nginx   shop.local   192.168.49.2   80      21m

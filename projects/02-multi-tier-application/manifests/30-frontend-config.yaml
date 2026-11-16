@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  default.conf: |
+    server {
+      listen 8080;
+      root /usr/share/nginx/html;
+
+      location / {
+        try_files $uri /index.html;
+      }
+
+      location /api/ {
+        proxy_pass http://backend/;
+      }
+    }
+  index.html: |
+    <!doctype html>
+    <title>Shop</title>
+    <h1>Shop visits</h1>
+    <pre id="out">loading...</pre>
+    <script>
+    fetch('/api/visits').then(r => r.json()).then(d => {
+      document.getElementById('out').textContent = JSON.stringify(d, null, 2);
+    });
+    </script>
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: shop
