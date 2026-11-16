@@ -20,3 +20,12 @@
 - Setting only a memory limit makes the request default to the limit.
 - Minikube --cpus=2 does not change Kubernetes allocatable CPU (scheduler saw ~12).
 - Revisit: write the readiness/liveness explanation in my own words; CPU throttling.
+
+## Projects 2+3, Part 1: Postgres StatefulSet and Flask backend (2026-11-16)
+- Built shop-api:1.0 locally, loaded into Minikube with `minikube image load`.
+- Postgres StatefulSet + volumeClaimTemplate: data survived Pod deletion (visits 3) and scale-to-zero (visits 4).
+- Headless Service DNS returns the Pod IP; with zero Pods it has no DNS records.
+- Backend: liveness (/healthz, no DB) vs readiness (/ready, checks DB). DB down -> backends 0/1, RESTARTS 0.
+- port-forward bypasses readiness.
+- Correction: EndpointSlices include not-ready Pods with ready=false.
+- Revisit: collect Event messages when diagnosing, not just symptoms.
