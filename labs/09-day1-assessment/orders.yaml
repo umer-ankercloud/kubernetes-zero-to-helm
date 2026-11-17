@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-config
+  namespace: day1
+data:
+  PODINFO_UI_MESSAGE: "Day 1 assessment"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  namespace: day1
+  labels:
+    app: orders
+    tier: application
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+        tier: application
+    spec:
+      containers:
+        - name: podinfo
+          image: ghcr.io/stefanprodan/podinfo:6.7.1
+          ports:
+            - name: http
+              containerPort: 9898
+              protocol: TCP
+          env:
+            - name: PODINFO_UI_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: orders-config
+                  key: PODINFO_UI_MESSAGE
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: orders-secret
+                  key: API_TOKEN
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9898
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9898
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+
